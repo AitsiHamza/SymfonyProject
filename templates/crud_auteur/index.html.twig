@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Auteurs
+{% endblock %}
+
+{% block body %}
+	<h1>Auteurs</h1>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Nom et Prenom</th>
+				<th>Sexe</th>
+				<th>Date de naissance</th>
+				<th>Nationalite</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for auteur in auteurs %}
+				<tr>
+					<td>{{ auteur.nomPrenom }}</td>
+					<td>{{ auteur.sexe }}</td>
+					<td>{{ auteur.dateNaissance ? auteur.dateNaissance|date('Y-m-d') : '' }}</td>
+					<td>{{ auteur.nationalite }}</td>
+					<td>
+						<a class="btn btn-primary" href="{{ path('c_r_u_d_auteur_show', {'id': auteur.id}) }}">Afficher</a>
+						{% if is_granted('ROLE_ADMIN') %}
+							<a class="btn btn-primary" href="{{ path('c_r_u_d_auteur_edit', {'id': auteur.id}) }}">Modifier</a>
+							{{ include('crud_auteur/_delete_form.html.twig') }}
+						{% endif %}
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="6">Aucun résultat</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	{% if is_granted('ROLE_ADMIN') %}
+		<a class="btn btn-primary" href="{{ path('c_r_u_d_auteur_new') }}">Ajouter</a>
+	{% endif %}
+{% endblock %}
